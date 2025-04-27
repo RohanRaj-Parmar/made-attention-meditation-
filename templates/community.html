@@ -1,92 +1,682 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Meditation Community{% endblock %}
+{% block title %}Community - Meditation App{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <h1>Meditation Community</h1>
-        <p class="lead">Connect with fellow meditators and share your experiences.</p>
+<style>
+    /* GENERAL */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f8fa;
+    color: #333;
+}
+
+/* LAYOUT */
+.community-container {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    padding: 1rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.sidebar {
+    width: 250px;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 300px;
+}
+
+/* HEADERS */
+.community-header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.2rem;
+}
+
+.community-header p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+section h2 {
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem;
+    color: #2a2a2a;
+    border-left: 4px solid #3c82f6;
+    padding-left: 0.6rem;
+}
+
+/* GRID SECTIONS */
+.live-sessions-grid,
+.upcoming-sessions-grid,
+.experts-grid,
+.my-sessions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+/* CARDS */
+.card {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* SESSION IMAGES */
+.session-image {
+    height: 160px;
+    overflow: hidden;
+}
+
+.session-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* SESSION DETAILS */
+.session-details,
+.expert-info {
+    padding: 1rem;
+}
+
+.session-details h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.4rem;
+}
+
+.session-technique {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.6rem;
+}
+
+/* HOST */
+.host {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.host-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    object-fit: cover;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 0.45rem 0.9rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #3c82f6;
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #2a6cdf;
+}
+
+.btn-outline {
+    background: #fff;
+    border: 1px solid #3c82f6;
+    color: #3c82f6;
+}
+
+.btn-outline:hover {
+    background: #e6f0ff;
+}
+
+.btn-sm {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+}
+
+/* LIVE BADGE */
+.live-badge {
+    position: absolute;
+    background-color: crimson;
+    color: #fff;
+    font-weight: bold;
+    padding: 0.25rem 0.7rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+
+/* COUNTDOWN */
+.session-countdown {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: 0.4rem;
+}
+
+/* EXPERT CARDS */
+.expert-avatar img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 1rem 1rem 0 0;
+}
+
+.expert-info h3 {
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    color: #222;
+}
+
+.expert-title {
+    color: #555;
+    font-weight: 600;
+    margin: 0.3rem 0;
+}
+
+.expert-bio {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* MY SESSIONS */
+.my-sessions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.my-sessions-header .view-all {
+    font-size: 0.9rem;
+    text-decoration: underline;
+    color: #3c82f6;
+}
+
+.my-session-card {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .community-container {
+        flex-direction: column;
+    }
+/* 
+    .sidebar {
+        width: 100%;
+        margin-right: 0;
+    } */
+
+    .main-content {
+        width: 100%;
+    }
+
+    .live-sessions-grid,
+    .upcoming-sessions-grid,
+    .experts-grid,
+    .my-sessions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* My Sessions Section */
+.my-sessions-section {
+    margin-top: 3rem;
+}
+
+.my-sessions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.my-sessions-header h2 {
+    font-size: 1.5rem;
+    color: #222;
+    font-weight: 600;
+}
+
+.my-sessions-header .view-all {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #3c82f6;
+    color: #3c82f6;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out;
+    font-weight: 500;
+}
+
+.my-sessions-header .view-all:hover {
+    background-color: #3c82f6;
+    color: white;
+}
+
+/* My Sessions Grid */
+.my-sessions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+}
+
+.my-session-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
+}
+
+.my-session-card:hover {
+    transform: translateY(-3px);
+}
+
+.my-session-card h3 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.my-session-card p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.8rem;
+}
+
+.my-session-card .btn-sm {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.7rem;
+    background-color: #3c82f6;
+    color: white;
+    border: none;
+    border-radius: 0.4rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.my-session-card .btn-sm:hover {
+    background-color: #295edb;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+    background-color: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-top: 3rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.contact-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.contact-item p, .contact-item a {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+}
+
+.contact-item a:hover {
+    color: #3c82f6;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.social-links a {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.social-links a:hover {
+    background-color: #3c82f6;
+    color: white;
+}
+
+/* NEWSLETTER */
+.newsletter-form {
+    display: flex;
+    margin-top: 1rem;
+    max-width: 400px;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem 0 0 0.5rem;
+    font-size: 0.9rem;
+}
+
+.newsletter-form button {
+    padding: 0.6rem 1rem;
+    background-color: #3c82f6;
+    color: white;
+    border: none;
+    border-radius: 0 0.5rem 0.5rem 0;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.newsletter-form button:hover {
+    background-color: #2a6cdf;
+}
+
+/* COMMUNITY GUIDELINES */
+.guidelines-link {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f0f7ff;
+    border-radius: 0.5rem;
+}
+
+.guidelines-link a {
+    color: #3c82f6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.guidelines-link a:hover {
+    text-decoration: underline;
+}
+</style>
+<div class="community-container">
+    <div class="sidebar">
+        {% include 'sidebar.html' %}
+    </div>
+    
+    <div class="main-content">
+        <div class="community-header">
+            <h1>Meditation Community</h1>
+            <p>Join live sessions, connect with experts, and meditate together</p>
+        </div>
+        
+        <!-- Community Guidelines Link -->
+        <div class="guidelines-link">
+        </div>
+        
+        <!-- Live Sessions Section -->
+        <!-- <section class="live-now-section">
+            <h2>Live Now</h2>
+            <div class="live-sessions-container">
+                {% if live_sessions %}
+                    <div class="live-sessions-grid">
+                        {% for session in live_sessions %}
+                            <div class="live-session-card">
+                                <div class="live-badge">LIVE</div>
+                                <div class="session-image">
+                                    {% if session.cover_image %}
+                                        <img src="{{ session.cover_image.url }}" alt="{{ session.title }}">
+                                    {% else %}
+                                        <img src="{% static 'images/session-default.jpg' %}" alt="{{ session.title }}">
+                                    {% endif %}
+                                </div>
+                                <div class="session-details">
+                                    <h3>{{ session.title }}</h3>
+                                    <p class="host">
+                                        {% if session.host.profile_image %}
+                                            <img src="{{ session.host.profile_image.url }}" class="host-avatar">
+                                        {% endif %}
+                                        {{ session.host.user.username }}
+                                    </p>
+                                    <p class="session-technique">{{ session.technique }}</p>
+                                    <div class="session-actions">
+                                        <a href="{% url 'join_live_session' session.id %}" class="btn btn-primary">Join Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-sessions">
+                        <p>No live sessions at the moment. Check upcoming sessions below!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section> -->
+        
+        <!-- Upcoming Sessions Section -->
+        <section class="upcoming-sessions-section">
+            
+            <h2>Upcoming Sessions</h2>
+            
+            <div class="upcoming-sessions-container">
+                {% if upcoming_sessions %}
+                    <div class="upcoming-sessions-grid">
+                        {% for session in upcoming_sessions %}
+                            <div class="upcoming-session-card">
+                                <div class="session-image">
+                                    {% if session.cover_image %}
+                                        <img src="{{ session.cover_image.url }}" alt="{{ session.title }}">
+                                    {% else %}
+                                        <img src="{% static 'images/session-default.jpg' %}" alt="{{ session.title }}">
+                                    {% endif %}
+                                </div>
+                                <div class="session-details">
+                                    <h3>{{ session.title }}</h3>
+                                    <p class="host">
+                                        {% if session.host.profile_image %}
+                                            <img src="{{ session.host.profile_image.url }}" class="host-avatar">
+                                        {% endif %}
+                                        {{ session.host.user.username }}
+                                    </p>
+                                    <p class="session-time">
+                                        <i class="far fa-calendar"></i> {{ session.start_time|date:"M d, Y" }} at {{ session.start_time|date:"h:i A" }}
+                                    </p>
+                                    <p class="session-technique">{{ session.technique }}</p>
+                                    <div class="session-countdown" data-start="{{ session.start_time|date:'c' }}">
+                                        Starts in: <span class="countdown-timer"></span>
+                                    </div>
+                                    <div class="session-actions">
+                                        <a href="{% url 'session_detail' session.id %}" class="btn btn-outline">View Details</a>
+                                        <form method="post" action="{% url 'register_for_session' session.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary">RSVP</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-sessions">
+                        <p>No upcoming sessions scheduled at the moment.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+        
+        <!-- Featured Experts Section -->
+        <!-- <section class="featured-experts-section">
+            <h2>Featured Meditation Experts</h2>
+            <div class="experts-container">
+                {% if featured_experts %}
+                    <div class="experts-grid">
+                        {% for expert in featured_experts %}
+                            <div class="expert-card">
+                                <div class="expert-avatar">
+                                    {% if expert.profile_image %}
+                                        <img src="{{ expert.profile_image.url }}" alt="{{ expert.user.username }}">
+                                    {% else %}
+                                        <img src="{% static 'images/default-avatar.jpg' %}" alt="{{ expert.user.username }}">
+                                    {% endif %}
+                                </div>
+                                <div class="expert-info">
+                                    <h3>{{ expert.user.get_full_name|default:expert.user.username }}</h3>
+                                    <p class="expert-title">{{ expert.expertise }}</p>
+                                    <p class="expert-bio">{{ expert.bio|truncatechars:100 }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-experts">
+                        <p>No featured experts at the moment.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+         -->
+        <!-- My Sessions Quick Access -->
+        {% if user.is_authenticated %}
+            <section class="my-sessions-section">
+                <div class="my-sessions-header">
+                    <h2>My Sessions</h2>
+                    <a href="{% url 'meditation:my_sessions' %}" class="view-all">View All</a>
+                </div>
+                <!-- This would be populated via JavaScript or another view -->
+                <div class="my-sessions-quick" id="my-sessions-container">
+                    <p>Loading your sessions...</p>
+                </div>
+            </section>
+        {% endif %}
+        
+        <!-- Contact Section -->
+        <section class="contact-section">
+            <h2>Contact Us</h2>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h3>Support</h3>
+                    <p>Need help with meditation sessions?</p>
+                    <a href="mailto:madeattention@gmail.com">madeattention@gmail.com</a>
+                    <a href="tel:+91 7433081013">+91 7433081013</a>
+                    <p>Support hours: 7am - 5pm EST, Mon-Fri</p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>Connect With Us</h3>
+                    <p>Follow us on social media:</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com/meditationapp" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/meditationapp" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://twitter.com/meditationapp" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://youtube.com/meditationapp" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+            
+            </div>
+        </section>
     </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Recent Comments</h5>
-            </div>
-            <div class="card-body">
-                {% for comment in comments %}
-                <div class="d-flex mb-4">
-                    <div class="flex-shrink-0">
-                        {% if comment.user.profile_pic %}
-                        <img src="{{ comment.user.profile_pic.url }}" class="rounded-circle" width="50" height="50" alt="{{ comment.user.username }}">
-                        {% else %}
-                        <div class="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <div class="d-flex justify-content-between">
-                            <h6 class="mb-0">{{ comment.user.username }}</h6>
-                            <small class="text-muted">{{ comment.created_at|date:"F j, Y" }}</small>
-                        </div>
-                        <small class="text-muted">On <a href="{% url 'meditation:technique_detail' comment.technique.id %}">{{ comment.technique.name }}</a></small>
-                        <p class="mt-1">{{ comment.content }}</p>
-                    </div>
-                </div>
-                {% empty %}
-                <p>No comments found. Be the first to share your experience!</p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Active Users</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    {% for user in users %}
-                    <div class="col-6 mb-3">
-                        <div class="d-flex align-items-center">
-                            {% if user.profile_pic %}
-                            <img src="{{ user.profile_pic.url }}" class="rounded-circle me-2" width="40" height="40" alt="{{ user.username }}">
-                            {% else %}
-                            <div class="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center me-2" style="width: 40px; height: 40px;">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            {% endif %}
-                            <div>
-                                <h6 class="mb-0">{{ user.username }}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="col-12">
-                        <p>No users found.</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+<!-- JavaScript for countdown timers -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Setup countdowns for each upcoming session
+        let countdownElements = document.querySelectorAll('.session-countdown');
         
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Join the Community</h5>
-            </div>
-            <div class="card-body">
-                <p>Share your meditation experiences, ask questions, and connect with other practitioners.</p>
-                <div class="d-grid gap-2">
-                    <a href="#" class="btn btn-primary">Login</a>
-                    <a href="#" class="btn btn-outline-primary">Register</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        countdownElements.forEach(function(element) {
+            let startTime = new Date(element.dataset.start);
+            let countdownDisplay = element.querySelector('.countdown-timer');
+            
+            function updateCountdown() {
+                let now = new Date();
+                let diff = startTime - now;
+                
+                if (diff <= 0) {
+                    countdownDisplay.textContent = "Starting now!";
+                    return;
+                }
+                
+                let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                let countdownText = "";
+                if (days > 0) countdownText += days + "d ";
+                countdownText += hours + "h " + minutes + "m";
+                
+                countdownDisplay.textContent = countdownText;
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 60000); // Update every minute
+        });
+        
+        // Load my sessions via AJAX
+        if (document.getElementById('my-sessions-container')) {
+            fetch('/my-sessions-quick/')
+                .then(response => response.json())
+                .then(data => {
+                    let container = document.getElementById('my-sessions-container');
+                    if (data.sessions && data.sessions.length > 0) {
+                        let html = '<div class="my-sessions-grid">';
+                        data.sessions.forEach(session => {
+                            html += `
+                                <div class="my-session-card">
+                                    <h3>${session.title}</h3>
+                                    <p>${session.date} at ${session.time}</p>
+                                    <a href="/session/${session.id}/" class="btn btn-sm">View</a>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                        container.innerHTML = html;
+                    } else {
+                        container.innerHTML = '<p>You haven\'t registered for any sessions yet.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading sessions:', error);
+                    let container = document.getElementById('my-sessions-container');
+                    container.innerHTML = '<p>Unable to load your sessions. Please try again later.</p>';
+                });
+        }
+    });
+</script>
 {% endblock %}

@@ -102,3 +102,5 @@ class OTP(models.Model):
     def is_valid(self):
         """Check if the OTP is still valid (not expired and not verified)"""
         return not self.is_verified and timezone.now() < self.expires_at
+    
+

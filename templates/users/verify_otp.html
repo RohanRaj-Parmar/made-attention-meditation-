@@ -42,7 +42,7 @@
     document.getElementById('resend-otp').addEventListener('click', function(e) {
         e.preventDefault();
         
-        fetch('{% url "resend_otp" %}', {
+        fetch('{% url "users:verify_otp" %}', {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',

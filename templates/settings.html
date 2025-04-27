@@ -1,160 +1,188 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Account Settings{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <h1>Account Settings</h1>
-        <p class="lead">Manage your profile and preferences.</p>
+<div class="container py-5">
+    <div class="row">
+        <!-- Settings Sidebar -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush" id="settings-tabs" role="tablist">
+                        <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#profile" role="tab">
+                            <i class="fas fa-user me-2"></i> Profile
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#preferences" role="tab">
+                            <i class="fas fa-cog me-2"></i> Preferences
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#notifications" role="tab">
+                            <i class="fas fa-bell me-2"></i> Notifications
+                        </a>
+                        <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#security" role="tab">
+                            <i class="fas fa-shield-alt me-2"></i> Security
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Content -->
+        <div class="col-md-9">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <div class="tab-content">
+                <!-- Profile Settings -->
+                <div class="tab-pane fade show active" id="profile">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Profile Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- <div class="text-center mb-4">
+                                {% if user.profile.profile_picture %}
+                                    <img src="{{ user.profile.profile_picture.url }}" class="rounded-circle img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;" alt="Profile Picture">
+                                {% else %}
+                                    <img src="{% static 'images/default-profile.png' %}" class="rounded-circle img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;" alt="Default Profile Picture">
+                                {% endif %}
+                            </div> -->
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">First Name</label>
+                                <p>{{ user.first_name }}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Last Name</label>
+                                <p>{{ user.last_name }}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Email</label>
+                                <p>{{ user.email }}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Bio</label>
+                                <p>{{ user.profile.bio|default:"No bio provided" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preferences Settings -->
+                <div class="tab-pane fade" id="preferences">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Preferences</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Theme</label>
+                                <p>{% if user.profile.theme == 'light' %}Light{% elif user.profile.theme == 'dark' %}Dark{% else %}System Default{% endif %}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Language</label>
+                                <p>{% if user.profile.language == 'en' %}English{% elif user.profile.language == 'es' %}Spanish{% elif user.profile.language == 'fr' %}French{% elif user.profile.language == 'de' %}German{% else %}English{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notification Settings -->
+                <div class="tab-pane fade" id="notifications">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Notification Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Email Notifications</label>
+                                <p>{% if user.profile.email_notifications %}Enabled{% else %}Disabled{% endif %}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Comment Notifications</label>
+                                <p>{% if user.profile.comment_notifications %}Enabled{% else %}Disabled{% endif %}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Newsletter</label>
+                                <p>{% if user.profile.newsletter %}Subscribed{% else %}Unsubscribed{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Security Settings -->
+                <div class="tab-pane fade" id="security">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Security Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-3">Two-Factor Authentication</h6>
+                            <div class="d-flex align-items-center mb-4">
+                                <div>
+                                    <p class="mb-0">Status: {% if user.profile.two_factor_enabled %}<span class="text-success">Enabled</span>{% else %}<span class="text-danger">Disabled</span>{% endif %}</p>
+                                </div>
+                            </div>
+                            
+                            <h6 class="mb-3">Login Sessions</h6>
+                            <p class="text-muted small">These are devices that have logged into your account</p>
+                            
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Current Session</h6>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                    <p class="mb-1 small">{{ request.META.HTTP_USER_AGENT|truncatechars:50 }}</p>
+                                    <small class="text-muted">Started: {% now "F j, Y, P" %}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Debug Information (you can remove this in production) -->
+                <!-- <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Debug Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Username:</strong> {{ user.username }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Has profile:</strong> {% if user.profile %}Yes{% else %}No{% endif %}</p>
+                        <p><strong>Bio:</strong> "{{ user.profile.bio|default:'Empty' }}"</p>
+                        <p><strong>Profile picture:</strong> {% if user.profile.profile_picture %}Set ({{ user.profile.profile_picture.url }}){% else %}Not set{% endif %}</p>
+                    </div>
+                </div> -->
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-md-3">
-        <div class="list-group mb-4">
-            <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="list">Profile</a>
-            <a href="#preferences" class="list-group-item list-group-item-action" data-bs-toggle="list">Preferences</a>
-            <a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="list">Notifications</a>
-            <a href="#security" class="list-group-item list-group-item-action" data-bs-toggle="list">Security</a>
-        </div>
-    </div>
-    
-    <div class="col-md-9">
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="profile">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Profile Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="alert alert-info">
-                                Please login to manage your profile settings.
-                            </div>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" value="DemoUser" disabled>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" value="user@example.com" disabled>
-                            </div>
-                            <div class="mb-3">
-                                <label for="bio" class="form-label">Bio</label>
-                                <textarea class="form-control" id="bio" rows="3" disabled>This is a demo bio for the user.</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="profilePic" class="form-label">Profile Picture</label>
-                                <input class="form-control" type="file" id="profilePic" disabled>
-                            </div>
-                            <button type="submit" class="btn btn-primary" disabled>Save Changes</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="tab-pane fade" id="preferences">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">User Preferences</h5>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="alert alert-info">
-                                Please login to manage your preferences.
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Theme</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="theme" id="themeLight" checked disabled>
-                                    <label class="form-check-label" for="themeLight">
-                                        Light
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="theme" id="themeDark" disabled>
-                                    <label class="form-check-label" for="themeDark">
-                                        Dark
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Language</label>
-                                <select class="form-select" disabled>
-                                    <option selected>English</option>
-                                    <option>Hindi</option>
-                                    <option>Spanish</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary" disabled>Save Preferences</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="tab-pane fade" id="notifications">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Notification Settings</h5>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="alert alert-info">
-                                Please login to manage your notification settings.
-                            </div>
-                            <div class="mb-3">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked disabled>
-                                    <label class="form-check-label" for="emailNotifications">Email Notifications</label>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="commentNotifications" checked disabled>
-                                    <label class="form-check-label" for="commentNotifications">Comment Replies</label>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="newsletterNotifications" checked disabled>
-                                    <label class="form-check-label" for="newsletterNotifications">Newsletter</label>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary" disabled>Save Notification Settings</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="tab-pane fade" id="security">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Security Settings</h5>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="alert alert-info">
-                                Please login to manage your security settings.
-                            </div>
-                            <div class="mb-3">
-                                <label for="currentPassword" class="form-label">Current Password</label>
-                                <input type="password" class="form-control" id="currentPassword" disabled>
-                            </div>
-                            <div class="mb-3">
-                                <label for="newPassword" class="form-label">New Password</label>
-                                <input type="password" class="form-control" id="newPassword" disabled>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                                <input type="password" class="form-control" id="confirmPassword" disabled>
-                            </div>
-                            <button type="submit" class="btn btn-primary" disabled>Change Password</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<script>
+    // Activate the tab based on URL hash
+    document.addEventListener('DOMContentLoaded', function() {
+        const hash = window.location.hash;
+        if (hash) {
+            const tab = document.querySelector(`[href="${hash}"]`);
+            if (tab) {
+                const bsTab = new bootstrap.Tab(tab);
+                bsTab.show();
+            }
+        }
+    });
+</script>
 {% endblock %}

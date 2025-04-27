@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Session Attendees - Meditation App{% endblock %}
+
+{% block content %}
+<div class="attendees-container">
+    <div class="sidebar">
+        {% include 'sidebar.html' %}
+    </div>
+    
+    <div class="main-content">
+        <div class="back-link">
+            <a href="{% url 'expert_dashboard' %}"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+        
+        <div class="session-header">
+            <h1>Attendees for: {{ session.title }}</h1>
+            <div class="session-meta">
+                <span><i class="far fa-calendar"></i> {{ session.start_time|date:"M d, Y" }} at {{ session.start_time|date:"h:i A" }}</span>
+                <span><i class="fas fa-users"></i> {{ registrations.count }} / {{ session.max_participants }} registered</span>
+            </div>
+        </div>
+        
+        <div class="attendees-list-container">
+            <div class="attendees-filters">
+                <button class="filter-btn active" data-filter="all">All Registrations ({{ registrations.count }})</button>
+                <button class="filter-btn" data-filter="attended">Attended ({{ registrations.filter.attended=True|length }})</button>
+                <button class="filter-btn" data-filter="not-attended">Not Attended ({{ registrations.filter.attended=False|length }})</button>
+            </div>
+            
+            {% if registrations %}
+                <table class="attendees-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Registration Date</th>
+                            <th>Attendance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registration in registrations %}
+                            <tr class="registration-row {% if registration.attended %}attended{% else %}not-attended{% endif %}">
+                                <td class="user-cell">
+                                    <div class="user-info">
+                                        <img src="{% static 'images/default-avatar.jpg' %}" alt="{{ registration.user.username }}" class="user-avatar">
+                                        <div>
+                                            <span class="user-name">{{ registration.user.get_full_name|default:registration.user.username }}</span>
+                                            <span class="user-email">{{ registration.user.email }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ registration.registered_at|date:"M d, Y H:i" }}</td>
+                                <td>
+                                    {% if registration.attended %}
+                                        <span class="status-badge attended"><i class="fas fa-check"></i> Attended</span>
+                                    {% else %}
+                                        <span class="status-badge not-attended"><i class="fas fa-times"></i> Not Attended</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="attendee-actions">
+                                        <button class="btn btn-sm btn-outline toggle-attendance" data-registration-id="{{ registration.id }}">
+                                            {% if registration.attended %}
+                                                Mark as Not Attended
+                                            {% else %}
+                                                Mark as Attended
+                                            {% endif %}
+                                        </button>
+                                        <a href="#" class="btn btn-sm btn-outline">Send Message</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-attendees">
+                    <p>No registrations for this session yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filter buttons functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const registrationRows = document.querySelectorAll('.registration-row');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                
+                // Show/hide rows based on filter
+                registrationRows.forEach(row => {
+                    if (filter === 'all') {
+                        row.style.display = 'table-row';
+                    } else if (filter === 'attended' && row.classList.contains('attended')) {
+                        row.style.display = 'table-row';
+                    } else if (filter === 'not-attended' && row.classList.contains('not-attended')) {
+                        row.style.display = 'table-row';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Toggle attendance functionality
+        const toggleAttendanceButtons = document.querySelectorAll('.toggle-attendance');
+        toggleAttendanceButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const registrationId = this.getAttribute('data-registration-id');
+                // Here you would make an AJAX call to update attendance status
+                // For this template, we'll just toggle the UI
+                const row = this.closest('.registration-row');
+                const attendanceStatus = row.querySelector('.status-badge');
+                
+                if (row.classList.contains('attended')) {
+                    row.classList.remove('attended');
+                    row.classList.add('not-attended');
+                    attendanceStatus.innerHTML = '<i class="fas fa-times"></i> Not Attended';
+                    attendanceStatus.classList.remove('attended');
+                    attendanceStatus.classList.add('not-attended');
+                    this.textContent = 'Mark as Attended';
+                } else {
+                    row.classList.remove('not-attended');
+                    row.classList.add('attended');
+                    attendanceStatus.innerHTML = '<i class="fas fa-check"></i> Attended';
+                    attendanceStatus.classList.remove('not-attended');
+                    attendanceStatus.classList.add('attended');
+                    this.textContent = 'Mark as Not Attended';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

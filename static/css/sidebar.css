@@ -1,0 +1,58 @@
+/* static/css/sidebar.css */
+/* Sidebar styling */
+.sidebar {
+    height: 100vh;
+    position: fixed;
+    z-index: 1040;
+    background-color: #f8f9fa;
+    padding-top: 60px; /* Increased to accommodate navbar */
+    left: -280px; /* Hide sidebar by default */
+    width: 280px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.sidebar.active {
+    left: 0; /* Show sidebar when active */
+}
+
+/* Close button */
+#sidebarClose {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Overlay */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1030;
+    top: 0;
+    left: 0;
+}
+
+/* Navbar toggle button styling */
+.sidebar-toggle-btn {
+    cursor: pointer;
+    padding: 5px 10px;
+    background: transparent;
+    border: none;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Prevent scrolling when sidebar is open */
+body.sidebar-open {
+    overflow: hidden;
+}

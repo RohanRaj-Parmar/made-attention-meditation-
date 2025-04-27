@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+{% block title %}Meditation Categories{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1>Meditation Categories</h1>
+        <p class="lead">Explore different types of meditation techniques organized by categories.</p>
+    </div>
+</div>
+
+<!-- Main Categories -->
+<div class="row mt-4">
+    <!-- 1. Breathing-Based Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-lungs fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">1. Breathing-Based Meditation (Pranayama & Awareness)</h5>
+                <p class="card-text">Meditation techniques focused on breath control and awareness for mindfulness and spiritual growth.</p>
+                <a href="{% url 'meditation:category_detail' 1 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 2. Dynamic & Active Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-running fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">2. Dynamic & Active Meditation</h5>
+                <p class="card-text">Active forms of meditation involving movement, dance, and physical expression.</p>
+                <a href="{% url 'meditation:category_detail' 2 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 3. Silent & Stillness Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-om fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">3. Silent & Stillness Meditation</h5>
+                <p class="card-text">Meditation practices focused on inner silence, stillness, and awareness without activity.</p>
+                <a href="{% url 'meditation:category_detail' 3 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 4. Sound & Chanting-Based Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-music fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">4. Sound & Chanting-Based Meditation</h5>
+                <p class="card-text">Meditation practices using sound, chanting, and mantras to focus the mind and elevate consciousness.</p>
+                <a href="{% url 'meditation:category_detail' 4 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 5. Chakra & Energy-Based Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-fire fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">5. Chakra & Energy-Based Meditation</h5>
+                <p class="card-text">Practices focused on activating, balancing and channeling subtle energy through the body's energy centers.</p>
+                <a href="{% url 'meditation:category_detail' 5 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 6. Trataka & Visualization Techniques -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-eye fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">6. Trataka & Visualization Techniques</h5>
+                <p class="card-text">Meditation methods using focused gazing and mental imagery to develop concentration and awareness.</p>
+                <a href="{% url 'meditation:category_detail' 6 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 7. Body Movement & Yogic Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-walking fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">7. Body Movement & Yogic Meditation</h5>
+                <p class="card-text">Meditation practices that incorporate gentle body movement and yogic principles.</p>
+                <a href="{% url 'meditation:category_detail' 7 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 8. Tantra & Sensory Awareness Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-hand-sparkles fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">8. Tantra & Sensory Awareness Meditation</h5>
+                <p class="card-text">Meditation practices that develop heightened awareness through sensory experiences.</p>
+                <a href="{% url 'meditation:category_detail' 8 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 9. Self-Inquiry & Awareness Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-search fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">9. Self-Inquiry & Awareness Meditation</h5>
+                <p class="card-text">Meditation practices focused on investigating the nature of self and consciousness.</p>
+                <a href="{% url 'meditation:category_detail' 9 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 10. Sleep & Relaxation-Based Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-bed fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">10. Sleep & Relaxation-Based Meditation</h5>
+                <p class="card-text">Meditation techniques designed to promote deep relaxation and conscious sleep states.</p>
+                <a href="{% url 'meditation:category_detail' 10 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 11. Elemental Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-water fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">11. Elemental Meditation</h5>
+                <p class="card-text">Meditation practices focused on connecting with the five elements: Earth, Water, Fire, Air, and Space.</p>
+                <a href="{% url 'meditation:category_detail' 11 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 12. Devotional & Bhakti Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-pray fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">12. Devotional & Bhakti Meditation</h5>
+                <p class="card-text">Meditation methods centered on devotion, prayer, and connection to the divine.</p>
+                <a href="{% url 'meditation:category_detail' 12 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 13. Shadow Work & Healing Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-heart fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">13. Shadow Work & Healing Meditation</h5>
+                <p class="card-text">Meditation practices for emotional healing, shadow integration, and self-transformation.</p>
+                <a href="{% url 'meditation:category_detail' 13 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 14. Nature & Environment-Based Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-tree fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">14. Nature & Environment-Based Meditation</h5>
+                <p class="card-text">Meditation practices that utilize natural settings and elements to enhance awareness.</p>
+                <a href="{% url 'meditation:category_detail' 14 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 15. Trance & Altered States Meditation -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-brain fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">15. Trance & Altered States Meditation</h5>
+                <p class="card-text">Meditation practices designed to access non-ordinary states of consciousness.</p>
+                <a href="{% url 'meditation:category_detail' 15 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 16. Scientific & Modern Meditation Approaches -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-microscope fa-3x"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">16. Scientific & Modern Meditation Approaches</h5>
+                <p class="card-text">Contemporary meditation practices based on scientific research and modern technology.</p>
+                <a href="{% url 'meditation:category_detail' 16 %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    
+    {% for category in categories %}
+    {% if category.id > 16 %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% if category.image %}
+            <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
+            {% else %}
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
+                <i class="fas fa-om fa-3x"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ category.name }}</h5>
+                <p class="card-text">{{ category.description|truncatewords:25 }}</p>
+                <a href="{% url 'meditation:category_detail' category.id %}" class="btn btn-primary">View Techniques</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% empty %}
+    {% if forloop.counter == 1 and static_categories_count == 0 %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            No categories found. Please check back later.
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<!-- Add necessary styling for Hindi text -->
+<style>
+    .hindi-text {
+        font-family: 'Noto Sans Devanagari', Arial, sans-serif;
+        line-height: 1.6;
+    }
+</style>
+
+{% endblock %}

@@ -21,12 +21,14 @@ ALLOWED_HOSTS = [
 
 # Application definition
 INSTALLED_APPS = [
+    "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'channels',
     'meditation',  # Add our app
     'users',
 
@@ -86,12 +88,30 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+ASGI_APPLICATION = 'meditation_project.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        # For production, use Redis:
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'CONFIG': {
+        #     "hosts": [('127.0.0.1', 6379)],
+        # },
+    },
+}
+
+# Email settings for SendGrid
+SENDGRID_API_KEY = os.getenv('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')
+DEFAULT_FROM_EMAIL = 'madeattention@gmail.com'
+
+# Standard Django email settings (fallback)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Or your preferred email provider
+EMAIL_HOST = 'smtp.gmail.com'  # Or your email provider's SMTP server
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'rohanrajparmar@gmail.com'  # Replace with your email
-EMAIL_HOST_PASSWORD = 'Neha@0810'  # Use an app password for Gmail
+EMAIL_HOST_USER = 'madeattention@gmail.com'
+EMAIL_HOST_PASSWORD = 'Neha@0810'  # Use app password for Gmail
 
 # Set the custom user model
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -102,7 +122,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 

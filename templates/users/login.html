@@ -56,4 +56,25 @@
         </div>
     </div>
 </div>
+{% block scripts %}
+    <!-- Your other scripts -->
+    <script>
+        // Auto-disappearing alerts code here
+        // JavaScript to make alert messages disappear after a few seconds
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all alert elements
+    const alerts = document.querySelectorAll('.alert');
+    
+    // Set timeout for each alert to disappear
+    alerts.forEach(function(alert) {
+        // Set the delay to 5 seconds (5000 milliseconds)
+        setTimeout(function() {
+            // Create a Bootstrap alert instance and close it
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 2000);
+    });
+});
+    </script>
+{% endblock %}
 {% endblock %}

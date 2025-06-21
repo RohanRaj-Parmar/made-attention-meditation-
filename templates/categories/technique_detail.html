@@ -1,130 +1,590 @@
 {% extends 'base.html' %}
+{% load video_tags %}
 
-{% block title %}{{ technique.name }} - Meditation Technique{% endblock %}
+{% block title %}{{ technique.name }} - Meditation App{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'meditation:home' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'meditation:category_list' %}">Categories</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'meditation:category_detail' technique.subcategory.category.id %}">{{ technique.subcategory.category.name }}</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'meditation:subcategory_detail' technique.subcategory.id %}">{{ technique.subcategory.name }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ technique.name }}</li>
-            </ol>
-        </nav>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>{{ technique.name }}</h1>
+            <div class="technique-details">
+                <div class="detail-badge">
+                    <i class="fas fa-leaf"></i>
+                    <strong>Category:</strong>
+                    <a href="{% url 'meditation:category_detail' technique.category.pk %}" class="category-link">
+                        {{ technique.category.name }}
+                    </a>
+                </div>
+
+    {% if technique.subcategory %}
+    <div class="detail-badge">
+        <i class="fas fa-sitemap"></i>
+        <strong>Subcategory:</strong> {{ technique.subcategory.name }}
+    </div>
+    {% endif %}
+
+    <div class="detail-badge">
+        <i class="fas fa-clock"></i>
+        <strong>Duration:</strong> {{ technique.duration }} minutes
+    </div>
+
+    <div class="detail-badge">
+        <i class="fas fa-signal"></i>
+        <strong>Difficulty:</strong> {{ technique.get_difficulty_display }}
+    </div>
+
+    {% if technique.time_of_day %}
+    <div class="detail-badge">
+        <i class="fas fa-clock"></i>
+        <strong>Best time:</strong> {{ technique.get_time_of_day_display }}
+    </div>
+    {% endif %}
+</div>
+
+        </div>
+        <div class="col-md-4 text-md-right">
+            <a href="{% url 'meditation:category_detail' technique.category.pk %}" class="btn btn-secondary">Back to Category</a>
+            <!-- {% if user.is_authenticated %}
+                <button id="favoriteBtn" class="btn {% if is_favorite %}btn-warning{% else %}btn-outline-warning{% endif %}"
+                    data-technique-id="{{ technique.pk }}">
+                    {% if is_favorite %}
+                        <i class="fas fa-star"></i> Favorited
+                    {% else %}
+                        <i class="far fa-star"></i> Add to Favorites
+                    {% endif %}
+                </button>
+            {% endif %} -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Technique content -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2>About this Technique</h2>
+                    {% if technique.summary %}
+<h4>Summary</h4>
+<p class="summary">{{ technique.summary }}</p>
+{% endif %}
+
+<h4>Description</h4>
+<p class="description">{{ technique.description }}</p>
+
+<h4>Benefits</h4>
+<p class="benefits">{{ technique.benefits }}</p>
+
+                    
+                    <h4>Instructions</h4>
+                    <div class="instructions">{{ technique.instructions }}</div>
+                </div>
+            </div>
+            
+            <!-- YouTube Video section -->
+            {% if technique.youtube_video_url %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2>Video Tutorial</h2>
+                    <div class="video-container">
+                        <iframe 
+                            src="https://www.youtube.com/embed/{{ technique.youtube_video_url|get_youtube_id }}" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Local Video (commented out but kept for reference) -->
+            <!-- {% if technique.video %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2>Video Guidance</h2>
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <video class="embed-responsive-item" controls>
+                            <source src="{{ technique.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+            {% endif %} -->
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Timer section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2>Session Timer</h2>
+                    <div class="timer-container">
+                        <div class="timer-display" id="timer">{{ technique.duration }}:00</div>
+                        <div class="timer-controls">
+                            <button id="startTimer" class="btn btn-primary"><i class="fas fa-play"></i> Start Session</button>
+                            <button id="resetTimer" class="btn btn-outline-secondary" disabled>Reset</button>
+                        </div>
+                    </div>
+                    <div class="progress">
+                        <div id="timerProgress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    
+                    <!-- Interval Bell Options with Preview -->
+                    <div class="bell-options">
+                        <h5><i class="fas fa-bell"></i> Interval Bell Sound</h5>
+                        <div>
+                            <div class="bell-label-container">
+                                <label>
+                                    <input type="radio" name="bellSound" value="tingsha" checked> Tingsha Bell
+                                </label>
+                                <button class="bell-preview-btn" data-sound="tingsha">
+                                    <i class="fas fa-play-circle"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="bell-label-container">
+                                <label>
+                                    <input type="radio" name="bellSound" value="singing"> Singing Bowl
+                                </label>
+                                <button class="bell-preview-btn" data-sound="singing">
+                                    <i class="fas fa-play-circle"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="bell-label-container">
+                                <label>
+                                    <input type="radio" name="bellSound" value="zen"> Zen Bell
+                                </label>
+                                <button class="bell-preview-btn" data-sound="zen">
+                                    <i class="fas fa-play-circle"></i>
+                                </button>
+                            </div>
+                            
+                            <label>
+                                <input type="radio" name="bellSound" value="none"> No Sound
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- New Bell Interval Selection -->
+                    <div class="interval-selection">
+                        <h5><i class="fas fa-clock"></i> Bell Interval</h5>
+                        <select id="bellInterval">
+                            <option value="5">Every 5 minutes</option>
+                            <option value="10">Every 10 minutes</option>
+                            <option value="15" selected>Every 15 minutes</option>
+                            <option value="20">Every 20 minutes</option>
+                            <option value="30">Every 30 minutes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="timer-info-box">
+                        <i class="fas fa-info-circle"></i> 
+                        <strong>Interval Bell:</strong> A gentle bell will sound at your selected interval to help mark your progress through the session. Click the <i class="fas fa-play-circle"></i> icon to preview each sound.
+                    </div>
+                    
+                    <div id="bellNotification" class="notification">
+                        <i class="fas fa-bell"></i> <span id="bellIntervalText">15</span> minutes milestone reached!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Related techniques -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="more-from-heading">
+                        <span class="more-icon"><i class="fas fa-compass"></i></span>
+                        <span class="more-label">More From:</span>
+                        <span class="more-category">{{ technique.category.name }}</span>
+                    </h3>
+                    
+                    <div class="list-group">
+                        {% for related in technique.category.techniques.all|slice:":5" %}
+                            {% if related != technique %}
+                                <a href="{% url 'meditation:technique_detail' related.pk %}" class="list-group-item list-group-item-action">
+                                    {{ related.name }}
+                                    <span class="badge badge-pill badge-secondary float-right">{{ related.duration }} min</span>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-8">
-        <h1>{{ technique.name }}</h1>
-        
-        <div class="mb-3">
-            <span class="badge {% if technique.difficulty_level == 'beginner' %}bg-success{% elif technique.difficulty_level == 'intermediate' %}bg-warning{% else %}bg-danger{% endif %} p-2">
-                {{ technique.difficulty_level|capfirst }}
-            </span>
-            <span class="badge bg-info p-2 ms-2">{{ technique.duration }}</span>
-        </div>
-        
-        <h3 class="mt-4">Description</h3>
-        <p>{{ technique.short_description }}</p>
-        
-        <h3 class="mt-4">Benefits</h3>
-        <div class="card mb-4">
-            <div class="card-body">
-                {{ technique.benefits|linebreaks }}
-            </div>
-        </div>
-        
-        <h3 class="mt-4">Instructions</h3>
-        <div class="card mb-4">
-            <div class="card-body">
-                {{ technique.instructions|linebreaks }}
-            </div>
-        </div>
-        
-        {% if technique.video_url %}
-        <h3 class="mt-4">Guided Meditation Video</h3>
-        <div class="ratio ratio-16x9 mb-4">
-            <iframe src="{{ technique.video_url }}" title="{{ technique.name }}" allowfullscreen></iframe>
-        </div>
-        {% endif %}
-        
-        <h3 class="mt-4">Community Comments</h3>
-        <div class="card">
-            <div class="card-body">
-                {% for comment in comments %}
-                <div class="d-flex mb-3">
-                    <div class="flex-shrink-0">
-                        {% if comment.user.profile_pic %}
-                        <img src="{{ comment.user.profile_pic.url }}" class="rounded-circle" width="50" height="50" alt="{{ comment.user.username }}">
-                        {% else %}
-                        <div class="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <h6 class="mb-0">{{ comment.user.username }}</h6>
-                        <small class="text-muted">{{ comment.created_at|date:"F j, Y" }}</small>
-                        <p class="mt-1">{{ comment.content }}</p>
-                    </div>
-                </div>
-                {% empty %}
-                <p>No comments yet. Be the first to share your experience!</p>
-                {% endfor %}
+<!-- Audio elements for bell sounds -->
+<audio id="tingshaSound" preload="auto">
+    <source src="/static/sounds/tingsha-bell.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="singingSound" preload="auto">
+    <source src="/static/sounds/singing-bowl.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="zenSound" preload="auto">
+    <source src="/static/sounds/zen-bell.mp3" type="audio/mpeg">
+</audio>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Favorite button functionality
+        const favoriteBtn = document.getElementById('favoriteBtn');
+        if (favoriteBtn) {
+            favoriteBtn.addEventListener('click', function() {
+                const techniqueId = this.getAttribute('data-technique-id');
                 
-                <div class="mt-4">
-                    <h5>Add a Comment</h5>
-                    <div class="alert alert-info">
-                        Please <a href="#">login</a> to add a comment.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                fetch(`/techniques/${techniqueId}/favorite/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.is_favorite) {
+                        favoriteBtn.classList.remove('btn-outline-warning');
+                        favoriteBtn.classList.add('btn-warning');
+                        favoriteBtn.innerHTML = '<i class="fas fa-star"></i> Favorited';
+                    } else {
+                        favoriteBtn.classList.remove('btn-warning');
+                        favoriteBtn.classList.add('btn-outline-warning');
+                        favoriteBtn.innerHTML = '<i class="far fa-star"></i> Add to Favorites';
+                    }
+                });
+            });
+        }
+        
+        // Audio elements
+        const tingshaSound = document.getElementById('tingshaSound');
+        const singingSound = document.getElementById('singingSound');
+        const zenSound = document.getElementById('zenSound');
+        const bellNotification = document.getElementById('bellNotification');
+        const bellIntervalText = document.getElementById('bellIntervalText');
+        const bellIntervalSelect = document.getElementById('bellInterval');
+        
+        // Bell preview buttons
+        const previewButtons = document.querySelectorAll('.bell-preview-btn');
+        let currentlyPlaying = null;
+        let bellAudioTimeouts = []; // Array to track sound timeouts
+
+        // Function to limit audio playback time
+        function limitAudioPlayback(audioElement, duration = 15) {
+            // Stop the audio after specified duration (in seconds)
+            const timeoutId = setTimeout(() => {
+                audioElement.pause();
+                audioElement.currentTime = 0;
+                
+                // Reset any preview buttons if this was a preview
+                if (currentlyPlaying) {
+                    resetPlayButton(currentlyPlaying);
+                    currentlyPlaying = null;
+                }
+            }, duration * 1000);
+            
+            // Add the timeout ID to our tracking array
+            bellAudioTimeouts.push(timeoutId);
+        }
+        
+        // Bell preview functionality
+        previewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const soundType = this.getAttribute('data-sound');
+                
+                // Stop any currently playing sound
+                if (currentlyPlaying) {
+                    stopAllSounds();
+                    
+                    // If the same button was clicked, just stop and exit
+                    if (currentlyPlaying === this) {
+                        currentlyPlaying = null;
+                        return;
+                    }
+                }
+                
+                // Toggle the appropriate sound
+                let sound;
+                switch(soundType) {
+                    case 'tingsha':
+                        sound = tingshaSound;
+                        break;
+                    case 'singing':
+                        sound = singingSound;
+                        break;
+                    case 'zen':
+                        sound = zenSound;
+                        break;
+                }
+                
+                if (sound) {
+                    // Reset sound
+                    sound.pause();
+                    sound.currentTime = 0;
+                    
+                    // Play sound
+                    sound.play();
+                    
+                    // Limit sound playback to 15 seconds
+                    limitAudioPlayback(sound, 15);
+                    
+                    // Mark this button as playing
+                    this.querySelector('i').classList.remove('fa-play-circle');
+                    this.querySelector('i').classList.add('fa-stop-circle');
+                    this.querySelector('i').classList.add('bell-playing');
+                    currentlyPlaying = this;
+                    
+                    // Select the corresponding radio button
+                    document.querySelector(`input[value="${soundType}"]`).checked = true;
+                    
+                    // Reset icon when sound finishes playing
+                    sound.onended = function() {
+                        resetPlayButton(currentlyPlaying);
+                        currentlyPlaying = null;
+                    };
+                }
+            });
+        });
+        
+        function resetPlayButton(button) {
+            if (button) {
+                const icon = button.querySelector('i');
+                icon.classList.remove('fa-stop-circle');
+                icon.classList.remove('bell-playing');
+                icon.classList.add('fa-play-circle');
+            }
+        }
+        
+        function stopAllSounds() {
+            // Clear all timeout handlers
+            bellAudioTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+            bellAudioTimeouts = [];
+            
+            // Stop all sounds
+            tingshaSound.pause();
+            tingshaSound.currentTime = 0;
+            singingSound.pause();
+            singingSound.currentTime = 0;
+            zenSound.pause();
+            zenSound.currentTime = 0;
+            
+            // Reset all buttons
+            previewButtons.forEach(btn => {
+                resetPlayButton(btn);
+            });
+        }
+        
+        // Timer functionality
+        const startBtn = document.getElementById('startTimer');
+        const resetBtn = document.getElementById('resetTimer');
+        const timerDisplay = document.getElementById('timer');
+        const progressBar = document.getElementById('timerProgress');
+        
+        // Set up the timer with the technique duration
+        const duration = {{ technique.duration|default:10 }} * 60; // Convert to seconds, default to 10 if not set
+        let timeLeft = duration;
+        let timerId;
+        let isRunning = false;
+        let lastIntervalBell = 0; // Track the last time the interval bell was played
+        
+        function getIntervalBellFrequency() {
+            // Get the selected bell interval value (in minutes)
+            const selectedInterval = parseInt(bellIntervalSelect.value, 10);
+            // Update the bell notification text
+            bellIntervalText.textContent = selectedInterval;
+            // Convert to seconds and return
+            return selectedInterval * 60;
+        }
+        
+        function playSelectedBell() {
+            const selectedBell = document.querySelector('input[name="bellSound"]:checked').value;
+            
+            if (selectedBell === 'none') return;
+            
+            // Stop any currently playing sounds
+            stopAllSounds();
+            
+            let soundToPlay;
+            
+            // Play the selected sound
+            switch(selectedBell) {
+                case 'tingsha':
+                    soundToPlay = tingshaSound;
+                    break;
+                case 'singing':
+                    soundToPlay = singingSound;
+                    break;
+                case 'zen':
+                    soundToPlay = zenSound;
+                    break;
+            }
+            
+            if (soundToPlay) {
+                soundToPlay.play();
+                // Limit bell sound to 15-20 seconds
+                limitAudioPlayback(soundToPlay, 15);
+            }
+            
+            // Show the notification
+            bellNotification.style.display = 'block';
+            // Reset the animation
+            bellNotification.style.animation = 'none';
+            bellNotification.offsetHeight; // Trigger reflow
+            bellNotification.style.animation = 'fadeOut 2s forwards';
+            bellNotification.style.animationDelay = '3s';
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update progress bar
+            const progress = ((duration - timeLeft) / duration) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Check if we should play the interval bell
+            const timeElapsed = duration - timeLeft;
+            const intervalBellFrequency = getIntervalBellFrequency();
+            const intervalsSinceStart = Math.floor(timeElapsed / intervalBellFrequency);
+            const currentInterval = intervalsSinceStart * intervalBellFrequency;
+            
+            if (timeElapsed > 0 && currentInterval > lastIntervalBell) {
+                lastIntervalBell = currentInterval;
+                playSelectedBell();
+            }
+        }
+        
+        function toggleTimer() {
+            if (!isRunning) {
+                startTimer();
+            } else {
+                pauseTimer();
+            }
+        }
+        
+        function startTimer() {
+            // Stop any preview sounds before starting the session
+            stopAllSounds();
+            
+            isRunning = true;
+            resetBtn.disabled = false;
+            
+            // Change button appearance to pause
+            startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Session';
+            startBtn.classList.remove('btn-primary');
+            startBtn.classList.add('btn-warning');
+            
+            // Disable bell preview buttons during session
+            previewButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+            });
+            
+            // Disable interval selection during session
+            bellIntervalSelect.disabled = true;
+            
+            timerId = setInterval(function() {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    timerDisplay.textContent = "Done!";
+                    startBtn.disabled = true;
+                    
+                    // Re-enable bell preview buttons
+                    previewButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                    });
+                    
+                    // Re-enable interval selection
+                    bellIntervalSelect.disabled = false;
+                    
+                    // Play the bell at the end of the session too
+                    playSelectedBell();
+                }
+            }, 1000);
+        }
+        
+        function pauseTimer() {
+            clearInterval(timerId);
+            isRunning = false;
+            
+            // Stop any playing bells
+            stopAllSounds();
+            
+            // Change button appearance back to play
+            startBtn.innerHTML = '<i class="fas fa-play"></i> Resume Session';
+            startBtn.classList.remove('btn-warning');
+            startBtn.classList.add('btn-primary');
+        }
+        
+        function resetTimer() {
+            clearInterval(timerId);
+            isRunning = false;
+            timeLeft = duration;
+            lastIntervalBell = 0; // Reset the interval bell counter
+            updateTimerDisplay();
+            
+            // Stop any playing bells
+            stopAllSounds();
+            
+            // Reset button appearance
+            startBtn.innerHTML = '<i class="fas fa-play"></i> Start Session';
+            startBtn.classList.remove('btn-warning');
+            startBtn.classList.add('btn-primary');
+            startBtn.disabled = false;
+            resetBtn.disabled = true;
+            
+            // Re-enable bell preview buttons
+            previewButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            });
+            
+            // Re-enable interval selection
+            bellIntervalSelect.disabled = false;
+            
+            // Hide notification if visible
+            bellNotification.style.display = 'none';
+        }
+        
+        // Update bell interval text when selection changes
+        bellIntervalSelect.addEventListener('change', function() {
+            const selectedInterval = parseInt(this.value, 10);
+            bellIntervalText.textContent = selectedInterval;
+        });
+        
+        startBtn.addEventListener('click', toggleTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        
+        // Initialize timer display
+        updateTimerDisplay();
+    });
     
-    <div class="col-md-4">
-        <div class="position-sticky" style="top: 2rem;">
-            {% if technique.image %}
-            <img src="{{ technique.image.url }}" class="img-fluid rounded mb-4" alt="{{ technique.name }}">
-            {% else %}
-            <div class="bg-light d-flex justify-content-center align-items-center rounded mb-4" style="height: 200px;">
-                <i class="fas fa-spa fa-4x text-secondary"></i>
-            </div>
-            {% endif %}
-            
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Quick Info</h5>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <strong>Category:</strong> {{ technique.subcategory.category.name }}
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Subcategory:</strong> {{ technique.subcategory.name }}
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Difficulty:</strong> {{ technique.difficulty_level|capfirst }}
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Duration:</strong> {{ technique.duration }}
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="d-grid gap-2">
-                <button class="btn btn-outline-primary" type="button">
-                    <i class="far fa-heart"></i> Add to Favorites
-                </button>
-                <button class="btn btn-outline-secondary" type="button">
-                    <i class="fas fa-share-alt"></i> Share
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+    // Function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
 {% endblock %}

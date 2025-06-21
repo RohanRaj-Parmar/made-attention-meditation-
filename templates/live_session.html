@@ -1,0 +1,378 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Live: {{ session.title }} - Meditation App{% endblock %}
+
+{% block extra_head %}
+<style>
+    body {
+        overflow: hidden;
+    }
+    .live-session-container {
+        display: flex;
+        height: 100vh;
+    }
+    .sidebar {
+        width: 250px; 
+        height: 100%;
+        overflow-y: auto;
+    }
+    .session-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    .session-header {
+        background-color: #1a1a2e;
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .session-main {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+    }
+    .video-container {
+        flex: 1;
+        background-color: #000;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .video-placeholder {
+        text-align: center;
+        color: white;
+    }
+    .chat-container {
+        width: 350px;
+        border-left: 1px solid #e1e1e1;
+        display: flex;
+        flex-direction: column;
+    }
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        background-color: #f9f9f9;
+    }
+    .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 80%;
+    }
+    .message.user {
+        background-color: #e1f5fe;
+        margin-left: auto;
+    }
+    .message.other {
+        background-color: #f1f1f1;
+    }
+    .message.system {
+        background-color: #fff3e0;
+        width: 100%;
+        text-align: center;
+        font-style: italic;
+    }
+    .message-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+    .message-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+    .message-username {
+        font-weight: bold;
+        color: #333;
+    }
+    .message-time {
+        margin-left: auto;
+        font-size: 0.8rem;
+        color: #888;
+    }
+    .message-content {
+        word-break: break-word;
+    }
+    .chat-input {
+        padding: 15px;
+        border-top: 1px solid #e1e1e1;
+        background-color: white;
+    }
+    #chat-form {
+        display: flex;
+    }
+    #chat-message {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px 0 0 4px;
+        resize: none;
+    }
+    #chat-submit {
+        padding: 10px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+    }
+    .live-indicator {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+    }
+    .live-dot {
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%;
+        margin-right: 8px;
+        animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+    .session-info {
+        display: flex;
+        align-items: center;
+    }
+    .host-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .video-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        background-color: rgba(0,0,0,0.5);
+        padding: 8px;
+        border-radius: 8px;
+    }
+    .control-button {
+        background: none;
+        border: none;
+        color: white;
+        margin: 0 10px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="live-session-container">
+    <div class="sidebar">
+        {% include 'sidebar.html' %}
+    </div>
+    
+    <div class="session-content">
+        <div class="session-header">
+            <div class="session-info">
+                {% if session.host.profile_image %}
+                    <img src="{{ session.host.profile_image.url }}" alt="{{ session.host.user.username }}" class="host-avatar">
+                {% else %}
+                    <img src="{% static 'images/default-avatar.jpg' %}" alt="{{ session.host.user.username }}" class="host-avatar">
+                {% endif %}
+                <div>
+                    <h1>{{ session.title }}</h1>
+                    <p>{{ session.technique }} with {{ session.host.user.get_full_name|default:session.host.user.username }}</p>
+                </div>
+            </div>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                LIVE
+            </div>
+        </div>
+        
+        <div class="session-main">
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <img src="{% static 'images/meditation-live.svg' %}" alt="Meditation Session" style="max-width: 300px;">
+                    <h2>Live Meditation Session</h2>
+                    <p>The host's video stream will appear here</p>
+                </div>
+                
+                <div class="video-controls">
+                    <button class="control-button" id="toggle-audio">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="control-button" id="toggle-video">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="control-button" id="toggle-fullscreen">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message system">
+                        <div class="message-content">
+                            Welcome to the live session! Please be respectful and follow meditation guidelines.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <form id="chat-form">
+                        <textarea id="chat-message" placeholder="Type your message..." rows="2"></textarea>
+                        <button type="submit" id="chat-submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // WebSocket setup for chat
+    const roomName = "{{ room_name }}";
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+    );
+    
+    const messageContainer = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-message');
+    
+    // Handle incoming messages
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        addMessage(data.username, data.message, data.timestamp);
+        
+        // Auto-scroll to bottom
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    };
+    
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+        addSystemMessage('Connection lost. Please refresh the page.');
+    };
+    
+    // Handle sending messages
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const message = chatInput.value.trim();
+        if (message) {
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            chatInput.value = '';
+        }
+    });
+    
+    // Handle Enter key in textarea
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            chatForm.dispatchEvent(new Event('submit'));
+        }
+    });
+    
+    // Function to add a message to the chat
+    function addMessage(username, message, timestamp) {
+        const messageDiv = document.createElement('div');
+        const currentUser = "{{ user.username }}";
+        
+        if (username === 'System') {
+            messageDiv.className = 'message system';
+            messageDiv.innerHTML = `
+                <div class="message-content">${message}</div>
+            `;
+        } else {
+            messageDiv.className = username === currentUser ? 'message user' : 'message other';
+            
+            const time = new Date(timestamp);
+            const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <span class="message-username">${username}</span>
+                    <span class="message-time">${formattedTime}</span>
+                </div>
+                <div class="message-content">${message}</div>
+            `;
+        }
+        
+        messageContainer.appendChild(messageDiv);
+    }
+    
+    // Function to add system message
+    function addSystemMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message system';
+        messageDiv.innerHTML = `
+            <div class="message-content">${message}</div>
+        `;
+        messageContainer.appendChild(messageDiv);
+    }
+    
+    // Handle video controls (placeholder functionality)
+    document.getElementById('toggle-audio').addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('fa-microphone')) {
+            icon.classList.replace('fa-microphone', 'fa-microphone-slash');
+        } else {
+            icon.classList.replace('fa-microphone-slash', 'fa-microphone');
+        }
+    });
+    
+    document.getElementById('toggle-video').addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('fa-video')) {
+            icon.classList.replace('fa-video', 'fa-video-slash');
+        } else {
+            icon.classList.replace('fa-video-slash', 'fa-video');
+        }
+    });
+    
+    document.getElementById('toggle-fullscreen').addEventListener('click', function() {
+        const videoContainer = document.querySelector('.video-container');
+        
+        if (!document.fullscreenElement) {
+            videoContainer.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable fullscreen: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    });
+    
+    // Session timeout check
+    const endTime = new Date("{{ session.end_time|date:'c' }}");
+    
+    function checkSessionStatus() {
+        const now = new Date();
+        if (now >= endTime) {
+            addSystemMessage('This session has ended. Thank you for participating!');
+            setTimeout(() => {
+                window.location.href = "{% url 'session_detail' session.id %}";
+            }, 5000);
+        }
+    }
+    
+    // Check session status every minute
+    checkSessionStatus();
+    setInterval(checkSessionStatus, 60000);
+</script>
+{% endblock %}

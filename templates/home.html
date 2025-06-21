@@ -1,76 +1,79 @@
 {% extends 'base.html' %}
 
-{% block title %}Meditation App - Home{% endblock %}
+{% block title %}Home - Meditation App{% endblock %}
 
 {% block content %}
-<div class="jumbotron bg-light p-5 rounded">
-    <h1 class="display-4">Welcome to Meditation App</h1>
-    <p class="lead">Discover over 112+ meditation techniques including Vipassana, Tratak, Reiki, Hypnotism and more.</p>
-    <hr class="my-4">
-    <p>Start your meditation journey today with our comprehensive collection of techniques.</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'meditation:category_list' %}" role="button">Explore Techniques</a>
-</div>
-
-<div class="row mt-5">
-    <div class="col-12">
-        <h2>Featured Categories</h2>
-    </div>
-</div>
-
-<div class="row mt-3">
-    {% for category in categories %}
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            {% if category.image %}
-            <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
-            {% else %}
-            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 140px;">
-                <i class="fas fa-om fa-3x"></i>
-            </div>
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ category.name }}</h5>
-                <p class="card-text">{{ category.description|truncatewords:20 }}</p>
-                <a href="{% url 'meditation:category_detail' category.id %}" class="btn btn-outline-primary">Explore</a>
-            </div>
+<style>
+    .meditation_time{
+        font-weight: bold;
+        color: #007bff;
+    }
+</style>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>Recommended Techniques for <span class="meditation_time">{{ current_time_of_day }}</span></h1>
+            <p class="lead">Discover meditation techniques suited for this time of day</p>
+            <p class="text-muted">Choose a technique that resonates with you. Once you've selected one, practice it for at least three days to experience its full effect. If you enjoy it, continue exploring and go deeper. The key is to practice with joy and awareness.</p>
         </div>
     </div>
-    {% empty %}
-    <div class="col-12">
-        <p>No categories found. Please check back later.</p>
-    </div>
-    {% endfor %}
-</div>
 
-<div class="row mt-5">
-    <div class="col-12">
-        <h2>Recent Techniques</h2>
-    </div>
-</div>
-
-<div class="row mt-3">
-    {% for technique in techniques %}
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-header">
-                <span class="badge {% if technique.difficulty_level == 'beginner' %}bg-success{% elif technique.difficulty_level == 'intermediate' %}bg-warning{% else %}bg-danger{% endif %}">
-                    {{ technique.difficulty_level|capfirst }}
-                </span>
-            </div>
-            {% if technique.image %}
-            <img src="{{ technique.image.url }}" class="card-img-top" alt="{{ technique.name }}">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ technique.name }}</h5>
-                <p class="card-text">{{ technique.short_description|truncatewords:15 }}</p>
-                <a href="{% url 'meditation:technique_detail' technique.id %}" class="btn btn-outline-primary">Learn More</a>
+    <div class="row">
+        {% for technique in time_based_techniques %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-{% cycle 'primary' 'success' 'info' 'warning' 'danger' %}">
+                <div class="card-header bg-transparent">
+                    <span class="badge bg-{% cycle 'primary' 'success' 'info' 'warning' 'danger' %}">{{ technique.category.name }}</span>
+                </div>
+                <div class="card-body">
+                    
+                    <h5 class="card-title">{{ technique.name }}</h5>
+                    <p class="card-text">{{ technique.summary }}</p>
+                    <a href="{% url 'meditation:technique_detail' technique.pk %}" class="btn btn-outline-{% cycle 'primary' 'success' 'info' 'warning' 'danger' %}">Start Now</a>
+                </div>
             </div>
         </div>
+        {% empty %}
+            <div class="col-12">
+                <p>No techniques available for this time period.</p>
+            </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <div class="col-12">
-        <p>No techniques found. Please check back later.</p>
+
+    <div class="row mt-5 mb-4">
+        <div class="col-12">
+            <h2>Explore Random Techniques</h2>
+            <p class="lead">Discover diverse meditation practices from different categories</p>
+        </div>
     </div>
-    {% endfor %}
+
+    <div class="row">
+        {% for technique in random_techniques %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-{% cycle 'primary' 'success' 'info' 'warning' 'danger' %}">
+                    <div class="card-header bg-transparent">
+                        <span class="badge bg-{% cycle 'primary' 'success' 'info' 'warning' 'danger' %}">{{ technique.category.name }}</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ technique.name }}</h5>
+                        <p class="card-text">{{ technique.summary }}</p>
+                        <a href="{% url 'meditation:technique_detail' technique.pk %}" class="btn btn-outline-{% cycle 'primary' 'success' 'info' 'warning' 'danger' %}">Start Now</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <h2>Browse All Categories</h2>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                {% for category in categories %}
+                    <a href="{% url 'meditation:category_detail' category.pk %}" class="btn btn-outline-secondary">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+            <a href="{% url 'meditation:category_list' %}" class="btn btn-secondary">View All Categories</a>
+        </div>
+    </div>
 </div>
 {% endblock %}

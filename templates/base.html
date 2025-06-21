@@ -8,50 +8,80 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/technique_detail.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
     {% block extra_css %}{% endblock %}
+    <style>
+        .profile-pic-nav {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .dropdown-menu {
+            min-width: 250px;
+            padding: 15px;
+        }
+        .dropdown-item {
+            padding: 8px 16px;
+        }
+        .profile-header {
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .profile-pic-larger {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .user-bio {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin: 5px 0 15px;
+            max-height: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .upload-photo-btn {
+            display: inline-block;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+        .profile-actions {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
+
+    
+    <!-- Include the sidebar template -->
+    {% include 'sidebar.html' %}
+
+
+    
     <div class="container-fluid">
+        
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 d-none d-md-block sidebar">
-                <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'meditation:home' %}">
-                                <i class="fas fa-home"></i> Home
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if '/categories/' in request.path %}active{% endif %}" href="{% url 'meditation:category_list' %}">
-                                <i class="fas fa-list"></i> Categories
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if '/library/' in request.path %}active{% endif %}" href="{% url 'meditation:library' %}">
-                                <i class="fas fa-book"></i> Library
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if '/community/' in request.path %}active{% endif %}" href="{% url 'meditation:community' %}">
-                                <i class="fas fa-users"></i> Community
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if '/settings/' in request.path %}active{% endif %}" href="{% url 'meditation:settings' %}">
-                                <i class="fas fa-cog"></i> Settings
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
             <!-- Main content -->
-            <main class="col-md-10 ms-sm-auto px-md-4">
+            <main class="col-12 px-md-4">
                 <!-- Top navigation -->
+                 
                 <nav class="navbar navbar-expand-lg navbar-light bg-light rounded mt-3 mb-4">
+                    
                     <div class="container-fluid">
-                        <a class="navbar-brand d-md-none" href="{% url 'meditation:home' %}">Meditation App</a>
+                        <!-- Add sidebar toggle button in navbar -->
+                        <button id="sidebarToggle" class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        
+                        <a class="navbar-brand" href="{% url 'meditation:home' %}">Meditation App</a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                             <span class="navbar-toggler-icon"></span>
                         </button>
@@ -76,14 +106,77 @@
                             </ul>
                             
                             <ul class="navbar-nav ms-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fas fa-user"></i> Login</a>
-                                </li>
+                                {% if user.is_authenticated %}
+                                
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            {% if user.profile.profile_picture %}
+                                                <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="profile-pic-nav">
+                                            {% else %}
+                                                <i class="fas fa-user-circle"></i>
+                                            {% endif %}
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                            <div class="profile-header">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="me-3">
+                                                        {% if user.profile.profile_picture %}
+                                                            <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="profile-pic-larger">
+                                                        {% else %}
+                                                            <i class="fas fa-user-circle" style="font-size: 60px;"></i>
+                                                        {% endif %}
+                                                        <a href="{% url 'meditation:settings' %}#profile" class="upload-photo-btn d-block text-primary">
+                                                            <i class="fas fa-camera"></i> Change photo
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <strong>{{ user.username }}</strong>
+                                                        <div class="text-muted small">{{ user.email }}</div>
+                                                    </div>
+                                                </div>
+                                                {% if user.profile.bio %}
+                                                    <div class="user-bio mt-2">
+                                                        {{ user.profile.bio|truncatechars:100 }}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="user-bio mt-2 text-muted">
+                                                        <em>No bio added yet. <a href="{% url 'meditation:settings' %}#profile">{{ user.bio }}</a></em>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="profile-actions">
+                                                <a class="dropdown-item" href="{% url 'meditation:settings' %}#profile">
+                                                    <i class="fas fa-user me-2"></i>Edit Profile
+                                                </a>
+                                                <a class="dropdown-item" href="{% url 'meditation:settings' %}">
+                                                    <i class="fas fa-cog me-2"></i>Settings
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="{% url 'users:logout' %}">
+                                                    <i class="fas fa-sign-out-alt me-2" ></i>Logout
+                                                </a>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                    </li>
+                                {% else %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'users:login' %}"><i class="fas fa-user"></i> Login</a>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
                 </nav>
-                
+                {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
                 <!-- Content -->
                 <div class="content-container">
                     {% block content %}{% endblock %}
@@ -91,9 +184,22 @@
             </main>
         </div>
     </div>
-    
+    <script>
+         // Auto-dismiss alerts after 2 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(function() {
+                // Create a bootstrap alert instance and call its close method
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 2000);  // 2000 milliseconds = 2 seconds
+        });
+    });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/sidebar.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

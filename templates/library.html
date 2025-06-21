@@ -12,73 +12,883 @@
 
 <div class="row mt-4">
     <div class="col-md-3">
+       
+        <!-- Category descriptions card -->
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="mb-0">Filters</h5>
+                <h5 class="mb-0">Category Descriptions</h5>
             </div>
             <div class="card-body">
-                <form method="get">
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Category</label>
-                        <select class="form-select" id="category" name="category">
-                            <option value="">All Categories</option>
-                            {% for category in categories %}
-                            <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"i" %}selected{% endif %}>
-                                {{ category.name }}
-                            </option>
-                            {% endfor %}
-                        </select>
+                <div class="accordion" id="categoryDescriptions">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="breathing-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#breathing-collapse" aria-expanded="false" aria-controls="breathing-collapse">
+                                Breathing-Based Meditation
+                            </button>
+                        </h2>
+                        <div id="breathing-collapse" class="accordion-collapse collapse" aria-labelledby="breathing-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Techniques that focus on controlling and observing the breath to achieve meditation states. These include pranayama and breath awareness practices.
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="mb-3">
-                        <label for="difficulty" class="form-label">Difficulty Level</label>
-                        <select class="form-select" id="difficulty" name="difficulty">
-                            <option value="">All Levels</option>
-                            <option value="beginner" {% if request.GET.difficulty == "beginner" %}selected{% endif %}>Beginner</option>
-                            <option value="intermediate" {% if request.GET.difficulty == "intermediate" %}selected{% endif %}>Intermediate</option>
-                            <option value="advanced" {% if request.GET.difficulty == "advanced" %}selected{% endif %}>Advanced</option>
-                        </select>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="dynamic-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dynamic-collapse" aria-expanded="false" aria-controls="dynamic-collapse">
+                                Dynamic & Active Meditation
+                            </button>
+                        </h2>
+                        <div id="dynamic-collapse" class="accordion-collapse collapse" aria-labelledby="dynamic-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Movement-based meditations that involve physical activity to achieve mindfulness and meditative states. Popular among those who find sitting still difficult.
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Apply Filters</button>
-                        <a href="{% url 'meditation:library' %}" class="btn btn-outline-secondary mt-2">Clear Filters</a>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="silent-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#silent-collapse" aria-expanded="false" aria-controls="silent-collapse">
+                                Silent & Stillness Meditation
+                            </button>
+                        </h2>
+                        <div id="silent-collapse" class="accordion-collapse collapse" aria-labelledby="silent-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Practices focused on cultivating inner silence, stillness and simply being present without specific focus objects or activities.
+                            </div>
+                        </div>
                     </div>
-                </form>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="sound-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sound-collapse" aria-expanded="false" aria-controls="sound-collapse">
+                                Sound & Chanting-Based Meditation
+                            </button>
+                        </h2>
+                        <div id="sound-collapse" class="accordion-collapse collapse" aria-labelledby="sound-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Techniques that use sound, mantras, and vocal expressions to focus the mind and achieve meditative states.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="chakra-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#chakra-collapse" aria-expanded="false" aria-controls="chakra-collapse">
+                                Chakra & Energy-Based Meditation
+                            </button>
+                        </h2>
+                        <div id="chakra-collapse" class="accordion-collapse collapse" aria-labelledby="chakra-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Practices focused on activating, balancing, and working with the body's energy centers (chakras) and subtle energy systems. Includes kundalini and specific chakra meditations.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="trataka-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#trataka-collapse" aria-expanded="false" aria-controls="trataka-collapse">
+                                Trataka & Visualization Techniques
+                            </button>
+                        </h2>
+                        <div id="trataka-collapse" class="accordion-collapse collapse" aria-labelledby="trataka-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Meditations involving visual focus or mental visualization. Past Life Regression explores memories of potential previous lives, while Future Life Progression visualizes potential futures to gain insights and guidance.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- More accordion items for other categories -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="body-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#body-collapse" aria-expanded="false" aria-controls="body-collapse">
+                                Body Movement & Yogic Meditation
+                            </button>
+                        </h2>
+                        <div id="body-collapse" class="accordion-collapse collapse" aria-labelledby="body-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Meditation practices that incorporate physical movement, postures, and body awareness as vehicles for mindfulness.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="tantra-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tantra-collapse" aria-expanded="false" aria-controls="tantra-collapse">
+                                Tantra & Sensory Awareness Meditation
+                            </button>
+                        </h2>
+                        <div id="tantra-collapse" class="accordion-collapse collapse" aria-labelledby="tantra-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Practices that work with sensory experiences, consciousness, and energy to achieve transformation and heightened awareness.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="inquiry-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#inquiry-collapse" aria-expanded="false" aria-controls="inquiry-collapse">
+                                Self-Inquiry & Awareness Meditation
+                            </button>
+                        </h2>
+                        <div id="inquiry-collapse" class="accordion-collapse collapse" aria-labelledby="inquiry-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Techniques focused on investigating the nature of self, consciousness, and reality through direct questioning and observation.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- NEW: Adding a scientific research accordion item -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="science-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#science-collapse" aria-expanded="false" aria-controls="science-collapse">
+                                Scientific Research
+                            </button>
+                        </h2>
+                        <div id="science-collapse" class="accordion-collapse collapse" aria-labelledby="science-heading" data-bs-parent="#categoryDescriptions">
+                            <div class="accordion-body">
+                                Learn about the latest scientific research on meditation's effects on the brain, immune system, stress reduction, and cognitive enhancement.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NEW: Adding a benefits of meditation card -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Benefits of Regular Practice</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Reduced stress and anxiety</li>
+                    <li class="list-group-item">Improved focus and concentration</li>
+                    <li class="list-group-item">Better emotional regulation</li>
+                    <li class="list-group-item">Enhanced self-awareness</li>
+                    <li class="list-group-item">Improved sleep quality</li>
+                    <li class="list-group-item">Lower blood pressure</li>
+                    <li class="list-group-item">Greater sense of calm</li>
+                </ul>
             </div>
         </div>
     </div>
     
     <div class="col-md-9">
-        <div class="row">
-            {% for technique in techniques %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span class="badge {% if technique.difficulty_level == 'beginner' %}bg-success{% elif technique.difficulty_level == 'intermediate' %}bg-warning{% else %}bg-danger{% endif %}">
-                            {{ technique.difficulty_level|capfirst }}
-                        </span>
-                        <small class="text-muted">{{ technique.duration }}</small>
-                    </div>
-                    {% if technique.image %}
-                    <img src="{{ technique.image.url }}" class="card-img-top" alt="{{ technique.name }}">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ technique.name }}</h5>
-                        <p class="card-text">{{ technique.short_description|truncatewords:15 }}</p>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <a href="{% url 'meditation:technique_detail' technique.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
-                    </div>
+        
+        <!-- NEW: Adding beginner's guide alert -->
+        <div class="card border-info mb-4 shadow-sm p-3 d-flex align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-info-circle-fill me-2 text-info"></i>
+                <div>
+                    <strong>New to meditation?</strong> Check out our  
+                    <a href="#beginners-guide" class="link-info" data-bs-toggle="collapse" aria-expanded="false" aria-controls="beginners-guide">
+                        Beginner's Guide
+                    </a> 
+                    to get started on your meditation journey.
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12">
-                <div class="alert alert-info">
-                    No techniques found matching your filters. Try adjusting your search criteria.
+        </div>
+        
+        
+        <!-- NEW: Beginner's guide collapsible content -->
+        <div class="collapse mb-4" id="beginners-guide">
+            <div class="card card-body">
+                <h4>5 Simple Steps to Start Your Meditation Practice</h4>
+                <ol>
+                    <li><strong>Start Small</strong> - Begin with just 5 minutes a day</li>
+                    <li><strong>Create a Space</strong> - Find a quiet, comfortable spot where you won't be disturbed</li>
+                    <li><strong>Focus on Breath</strong> - Simply observe your natural breathing to anchor yourself in the present</li>
+                    <li><strong>Be Kind to Yourself</strong> - When your mind wanders (it will!), gently bring it back without judgment</li>
+                    <li><strong>Be Consistent</strong> - Try to practice at the same time each day to build a habit</li>
+                </ol>
+                <div class="text-center">
+                    <a href="/media/mindfulness_guide.pdf" class="btn btn-outline-primary" target="_blank" rel="noopener noreferrer">Download Our Free "7 Days of Mindfulness" Guide</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab content -->
+        <div class="tab-content" id="categoryTabsContent">
+            <div class="tab-pane fade show active" id="all-techniques" role="tabpanel" aria-labelledby="all-tab">
+                <div class="row">
+                    {% for technique in techniques %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span class="badge {% if technique.difficulty_level == 'beginner' %}bg-success{% elif technique.difficulty_level == 'intermediate' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ technique.difficulty_level|capfirst }}
+                                </span>
+                                <small class="text-muted">{{ technique.duration }}</small>
+                            </div>
+                            {% if technique.image %}
+                            <img src="{{ technique.image.url }}" class="card-img-top" alt="{{ technique.name }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ technique.name }}</h5>
+                                <p class="card-text">{{ technique.short_description|truncatewords:15 }}</p>
+                                <span class="badge bg-info">{{ technique.category.name }}</span>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="{% url 'meditation:technique_detail' technique.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <!-- <div class="col-12">
+                        <div class="alert alert-info">
+                            No techniques found matching your filters. Try adjusting your search criteria.
+                        </div>
+                    </div> -->
+                    {% endfor %}
+                </div>
+            </div>
+            
+            {% for category in categories %}
+            <div class="tab-pane fade" id="cat{{ category.id }}" role="tabpanel" aria-labelledby="cat{{ category.id }}-tab">
+                <div class="row">
+                    {% for technique in techniques %}
+                    {% if technique.category.id == category.id %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span class="badge {% if technique.difficulty_level == 'beginner' %}bg-success{% elif technique.difficulty_level == 'intermediate' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ technique.difficulty_level|capfirst }}
+                                </span>
+                                <small class="text-muted">{{ technique.duration }}</small>
+                            </div>
+                            {% if technique.image %}
+                            <img src="{{ technique.image.url }}" class="card-img-top" alt="{{ technique.name }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ technique.name }}</h5>
+                                <p class="card-text">{{ technique.short_description|truncatewords:15 }}</p>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="{% url 'meditation:technique_detail' technique.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% empty %}
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            No techniques found in this category.
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
             {% endfor %}
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3>Scientific Research on Meditation</h3>
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Brain Changes</h5>
+                                <p>Research using functional MRI has shown that regular meditation practice can:</p>
+                                <ul>
+                                    <li>Increase gray matter density in areas related to learning and memory</li>
+                                    <li>Reduce activity in the default mode network (mind wandering)</li>
+                                    <li>Strengthen connections in the prefrontal cortex (executive function)</li>
+                                    <li>Reduce amygdala size (fear and stress response)</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Physiological Benefits</h5>
+                                <ul>
+                                    <li>Reduced cortisol levels (stress hormone)</li>
+                                    <li>Decreased inflammation markers</li>
+                                    <li>Improved immune function</li>
+                                    <li>Lower blood pressure and heart rate</li>
+                                    <li>Enhanced sleep quality</li>
+                                    <li>Increased telomere length (cellular aging)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        <!-- Featured techniques section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3>Featured Meditation Techniques</h3>
+                <hr>
+            </div>
+            
+            <!-- Section for Kundalini and Chakra comparison -->
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Chakra & Kundalini: Understanding the Difference</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Chakra Meditation</h5>
+                                <p>Chakra meditations focus on balancing and activating specific energy centers in the body. There are seven main chakras, each associated with different physical, emotional, and spiritual aspects:</p>
+                                <ul>
+                                    <li><strong>Root Chakra (Muladhara)</strong>: Grounding and stability</li>
+                                    <li><strong>Sacral Chakra (Svadhisthana)</strong>: Creativity and emotion</li>
+                                    <li><strong>Solar Plexus Chakra (Manipura)</strong>: Personal power and confidence</li>
+                                    <li><strong>Heart Chakra (Anahata)</strong>: Love and compassion</li>
+                                    <li><strong>Throat Chakra (Vishuddha)</strong>: Communication and expression</li>
+                                    <li><strong>Third Eye Chakra (Ajna)</strong>: Intuition and insight</li>
+                                    <li><strong>Crown Chakra (Sahasrara)</strong>: Spiritual connection and enlightenment</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Kundalini Meditation</h5>
+                                <p>Kundalini meditation focuses on awakening the dormant spiritual energy (Kundalini) that is believed to reside at the base of the spine. When awakened, this energy rises through the chakras, leading to spiritual awakening.</p>
+                                <p>Key aspects of Kundalini meditation:</p>
+                                <ul>
+                                    <li>Activates energy movement through the entire chakra system</li>
+                                    <li>Often involves dynamic breathing techniques like Breath of Fire</li>
+                                    <li>May include mantras, mudras (hand positions), and physical poses</li>
+                                    <li>Aims for transformative spiritual experiences</li>
+                                    <li>Traditionally requires guidance from an experienced teacher</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section for Past Life Regression and Future Life Progression -->
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0">Past Life Regression & Future Life Progression</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Past Life Regression</h5>
+                                <p>Past Life Regression is a guided visualization technique that uses deep relaxation to access memories that may be connected to previous lifetimes.</p>
+                                <p><strong>Key characteristics:</strong></p>
+                                <ul>
+                                    <li>Uses hypnosis or deep meditation states</li>
+                                    <li>Aims to uncover patterns, talents, or challenges from past lives</li>
+                                    <li>May help resolve unexplained fears, phobias, or recurring issues</li>
+                                    <li>Provides insight into soul connections with others</li>
+                                    <li>Can be used as a tool for spiritual growth and understanding</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Future Life Progression</h5>
+                                <p>Future Life Progression is a guided visualization technique that allows you to explore potential future timelines and possibilities.</p>
+                                <p><strong>Key characteristics:</strong></p>
+                                <ul>
+                                    <li>Uses similar meditation or hypnosis techniques as past life regression</li>
+                                    <li>Helps visualize potential outcomes of current choices</li>
+                                    <li>Can provide guidance for important life decisions</li>
+                                    <li>May connect with future versions of yourself for wisdom</li>
+                                    <li>Works with the concept that time is non-linear at higher levels of consciousness</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- NEW: Adding meditation across traditions comparison -->
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">Meditation Across Different Traditions</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tradition</th>
+                                        <th>Key Practices</th>
+                                        <th>Focus/Goals</th>
+                                        <th>Notable Techniques</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Buddhist</strong></td>
+                                        <td>Mindfulness, Vipassana, Loving-kindness</td>
+                                        <td>Insight into impermanence, non-self, ending of suffering</td>
+                                        <td>Anapanasati (breath meditation), Metta (loving-kindness)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Hindu/Yogic</strong></td>
+                                        <td>Mantra, Chakra focus, Kundalini</td>
+                                        <td>Union with divine, energy awakening, self-realization</td>
+                                        <td>Transcendental Meditation, Yoga Nidra</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Taoist</strong></td>
+                                        <td>Qigong, Internal alchemy, Nature-based</td>
+                                        <td>Balance, harmony with nature, longevity</td>
+                                        <td>Emptiness meditation, Tai Chi</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Sufi (Islamic)</strong></td>
+                                        <td>Dhikr, Muraqaba, Whirling</td>
+                                        <td>Divine love, surrender, union with God</td>
+                                        <td>Remembrance of God, Whirling dervish</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Christian</strong></td>
+                                        <td>Contemplative prayer, Lectio Divina</td>
+                                        <td>Connection with God, spiritual insight</td>
+                                        <td>Centering Prayer, Jesus Prayer</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Secular/Modern</strong></td>
+                                        <td>MBSR, focused attention, body scan</td>
+                                        <td>Stress reduction, mental clarity, emotional regulation</td>
+                                        <td>Mindfulness-Based Stress Reduction, Headspace technique</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <!-- NEW: Adding a scientific research section -->
+       
+            
+            <!-- add from this -->
+            <!-- Recommended Pathways Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h3>Recommended Meditation Pathways</h3>
+        <p class="lead">Structured journeys designed for specific goals</p>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">Stress Reduction Path</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>A 30-day journey to reduce anxiety and manage stress effectively.</p>
+                        <ol>
+                            <li>Body Scan Meditation (Week 1)</li>
+                            <li>Breath Awareness (Week 2)</li>
+                            <li>Loving-Kindness Practice (Week 3)</li>
+                            <li>Open Awareness (Week 4)</li>
+                        </ol>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'meditation:category_list' %}" class="btn btn-outline-warning">Start This Journey</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Emotional Balance Path</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>A 6-week progression to develop emotional resilience and stability.</p>
+                        <ol>
+                            <li>Mindful Breathing (Week 1)</li>
+                            <li>Heart-Centered Practices (Week 2)</li>
+                            <li>Emotion Labeling (Week 3-4)</li>
+                            <li>Self-Compassion (Week 5-6)</li>
+                        </ol>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'meditation:category_list' %}" class="btn btn-outline-info">Start This Journey</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Spiritual Awakening Path</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>A 90-day deep exploration of consciousness and spiritual awareness.</p>
+                        <ol>
+                            <li>Foundational Presence (Weeks 1-2)</li>
+                            <li>Energy Awareness (Weeks 3-4)</li>
+                            <li>Heart Opening (Weeks 5-6)</li>
+                            <li>Silent Meditation (Weeks 7-9)</li>
+                            <li>Self-Inquiry (Weeks 10-13)</li>
+                        </ol>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'meditation:category_list' %}" class="btn btn-outline-success">Start This Journey</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Yogic Paths from Bhagavad Gita -->
+<div class="col-12 mb-4">
+    <div class="card">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Yogic Paths from the Bhagavad Gita</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="card h-100 border-warning">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Karma Yoga</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>The Path of Action</strong></p>
+                            <p>Meditation through selfless action without attachment to results. Performing your duties with full awareness and detachment.</p>
+                            <p><em>"Focus on the action, not the fruit of the action."</em></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card h-100 border-warning">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Bhakti Yoga</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>The Path of Devotion</strong></p>
+                            <p>Meditation through love and devotion. Cultivating a relationship with the divine through surrender, chanting, and worship.</p>
+                            <p><em>"Whatever you do, do it as an offering to me."</em></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card h-100 border-warning">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Jnana Yoga</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>The Path of Knowledge</strong></p>
+                            <p>Meditation through self-inquiry and spiritual wisdom. Discriminating between the real and unreal to realize one's true nature.</p>
+                            <p><em>"Knowledge is the highest purifier."</em></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card h-100 border-warning">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Dhyana Yoga</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>The Path of Meditation</strong></p>
+                            <p>Direct meditative practices to control the mind and senses. Regular, disciplined meditation leading to samadhi (absorption).</p>
+                            <p><em>"The yogi should meditate within the heart."</em></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <p class="text-center">The Bhagavad Gita teaches that all paths ultimately lead to the same goal, and one should choose the path that resonates most with their nature (svadharma). Lord Krishna explains that these various forms of yoga are interconnected and complementary rather than separate practices.</p>
+                <div class="text-center">
+                    <a href="#" class="btn btn-outline-warning">Learn Gita-Based Meditation Practices</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Meditation in Sacred Texts & Spiritual Traditions -->
+<div class="col-12 mb-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Contemplative Practices in Sacred Texts</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Quran & Islamic Tradition</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Contemplative Practices:</strong></p>
+                            <ul>
+                                <li><strong>Dhikr</strong> - Remembrance of Allah through repetition of divine names or phrases</li>
+                                <li><strong>Muraqaba</strong> - Silent meditation focused on Allah's presence</li>
+                                <li><strong>Tafakkur</strong> - Deep reflection on creation and Quranic verses</li>
+                                <li><strong>Muhasaba</strong> - Self-examination and accountability practice</li>
+                            </ul>
+                            <p class="font-italic">"Verily, in the remembrance of Allah do hearts find rest." (Quran 13:28)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Bible & Christian Tradition</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Contemplative Practices:</strong></p>
+                            <ul>
+                                <li><strong>Lectio Divina</strong> - Meditative reading of scripture in four stages</li>
+                                <li><strong>Centering Prayer</strong> - Silence-based prayer with a sacred word</li>
+                                <li><strong>Jesus Prayer</strong> - Repetition of "Lord Jesus Christ, have mercy on me"</li>
+                                <li><strong>Examen</strong> - Daily reflection on God's presence in one's experiences</li>
+                            </ul>
+                            <p class="font-italic">"Be still, and know that I am God." (Psalm 46:10)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Jewish Tradition</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Contemplative Practices:</strong></p>
+                            <ul>
+                                <li><strong>Hitbodedut</strong> - Personal, spontaneous dialogue with God</li>
+                                <li><strong>Hitbonenut</strong> - Focused contemplation of divine attributes</li>
+                                <li><strong>Devekut</strong> - Cultivation of "cleaving" to God in all activities</li>
+                                <li><strong>Kavvanah</strong> - Directing one's heart and intention in prayer</li>
+                            </ul>
+                            <p class="font-italic">"I have set the Lord always before me." (Psalm 16:8)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Buddhist Scriptures</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Contemplative Practices:</strong></p>
+                            <ul>
+                                <li><strong>Anapanasati</strong> - Mindfulness of breathing described in the Satipatthana Sutta</li>
+                                <li><strong>Metta Bhavana</strong> - Loving-kindness meditation from the Karaniya Metta Sutta</li>
+                                <li><strong>Vipassana</strong> - Insight meditation based on the Four Foundations of Mindfulness</li>
+                                <li><strong>Samatha</strong> - Concentration practice leading to tranquility</li>
+                            </ul>
+                            <p class="font-italic">"All that we are is the result of what we have thought." (Dhammapada)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Taoist Texts</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Contemplative Practices:</strong></p>
+                            <ul>
+                                <li><strong>Zuowang</strong> - "Sitting and forgetting" practice</li>
+                                <li><strong>Neiguan</strong> - Inner visualization and contemplation</li>
+                                <li><strong>Wu Wei</strong> - Meditation on non-action and natural flow</li>
+                                <li><strong>Embracing the One</strong> - Unifying meditation described in the Tao Te Ching</li>
+                            </ul>
+                            <p class="font-italic">"Empty your mind of all thoughts. Let your heart be at peace." (Tao Te Ching)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Sikh Tradition</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Contemplative Practices:</strong></p>
+                            <ul>
+                                <li><strong>Naam Simran</strong> - Remembrance and repetition of God's name</li>
+                                <li><strong>Shabad Kirtan</strong> - Meditative singing of sacred hymns</li>
+                                <li><strong>Vichar</strong> - Contemplative reflection on Guru's teachings</li>
+                                <li><strong>Seva</strong> - Meditation through selfless service to others</li>
+                            </ul>
+                            <p class="font-italic">"Meditate on the Lord's Name with every breath." (Guru Granth Sahib)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <p class="mb-0"><strong>Note:</strong> Many spiritual traditions emphasize that their contemplative practices are meant to be learned under proper guidance. While these brief descriptions provide an overview, deeper practice often benefits from instruction by experienced teachers within each tradition.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Common Elements Across Traditions -->
+<div class="col-12 mb-4">
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Universal Elements in Spiritual Meditation</h4>
+        </div>
+        <div class="card-body">
+            <p>Despite their diverse origins, contemplative practices across spiritual traditions share several common elements:</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-heart"></i> Heart-Centered Approaches</h5>
+                            <p>Most traditions include practices focused on cultivating qualities of the heart:</p>
+                            <ul>
+                                <li>Love and compassion (Metta in Buddhism, Agape in Christianity)</li>
+                                <li>Devotion and surrender (Bhakti in Hinduism, Taslim in Islam)</li>
+                                <li>Gratitude and reverence (found in nearly all traditions)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-mic"></i> Sound and Sacred Words</h5>
+                            <p>Many traditions use sound as a contemplative tool:</p>
+                            <ul>
+                                <li>Mantra recitation (Hinduism, Buddhism)</li>
+                                <li>Dhikr or remembrance (Islam)</li>
+                                <li>Chanting psalms or scriptures (Christianity, Judaism)</li>
+                                <li>Repetitive prayers (Jesus Prayer, Naam Japna)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-lungs"></i> Breath Awareness</h5>
+                            <p>The breath serves as a meditation anchor across traditions:</p>
+                            <ul>
+                                <li>Pranayama in Yoga traditions</li>
+                                <li>Anapanasati in Buddhism</li>
+                                <li>Breath awareness in Hesychasm (Eastern Christianity)</li>
+                                <li>Breathing practices in Sufi meditation</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-person-fill"></i> Self-Inquiry</h5>
+                            <p>Questioning the nature of self appears in various forms:</p>
+                            <ul>
+                                <li>"Who am I?" inquiry (Advaita Vedanta)</li>
+                                <li>Non-self investigation (Buddhist Vipassana)</li>
+                                <li>Self-examination (Christian Examen, Jewish Cheshbon HaNefesh)</li>
+                                <li>"Witnessing" practices (many traditions)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <a href="{% url 'meditation:category_list' %}" class="btn btn-outline-info">Explore Interfaith Meditation Practices</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- FAQ Section -->
+<div class="row mt-5 mb-5">
+    <div class="col-12">
+        <h3>Frequently Asked Questions</h3>
+        <hr>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faq1">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="false" aria-controls="faqCollapse1">
+                        How long should I meditate each day?
+                    </button>
+                </h2>
+                <div id="faqCollapse1" class="accordion-collapse collapse" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>When starting out, even 5-10 minutes per day can be beneficial. Consistency is more important than duration. As you become more comfortable with the practice, you can gradually increase to 20-30 minutes or longer. Many experienced meditators practice for 45-60 minutes daily, but the "right" amount of time is whatever fits your lifestyle and brings you benefits.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faq2">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                        My mind keeps wandering during meditation. Am I doing something wrong?
+                    </button>
+                </h2>
+                <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>Not at all! Mind wandering is completely normal and happens to everyone, even experienced meditators. The practice isn't about stopping thoughts but noticing when your mind has wandered and gently bringing your attention back to your focus point (like your breath). Each time you notice your mind has wandered and bring it back, you're strengthening your mindfulness "muscle" - that's actually the practice!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faq3">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                        Which meditation technique is best for beginners?
+                    </button>
+                </h2>
+                <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>Simple breath awareness meditation is often recommended for beginners because:</p>
+                        <ul>
+                            <li>It requires no special equipment or preparation</li>
+                            <li>The breath is always with you as a meditation anchor</li>
+                            <li>It's straightforward to understand and practice</li>
+                            <li>It has immediate benefits for stress reduction</li>
+                        </ul>
+                        <p>Guided meditations can also be helpful for beginners as they provide structure and direction. Body scan meditations are another accessible option that helps develop body awareness.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faq4">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                        Is there a best time of day to meditate?
+                    </button>
+                </h2>
+                <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>Many traditional practices recommend meditating early in the morning, shortly after waking. This time can be beneficial because:</p>
+                        <ul>
+                            <li>The mind is often calmer before the day's activities begin</li>
+                            <li>Morning meditation can set a positive tone for the day</li>
+                            <li>There are fewer distractions</li>
+                        </ul>
+                        <p>However, the best time is whenever you can consistently practice. Some people prefer meditating in the evening to unwind, while others find short midday sessions helpful for resetting. Experiment to find what works best for your schedule and energy levels.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faq5">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                        How soon will I see benefits from meditation?
+                    </button>
+                </h2>
+                <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>Some benefits, like reduced tension and increased calm, can be felt after just one session. Research suggests that practicing meditation consistently for 8 weeks can lead to measurable changes in stress levels, focus, and emotional regulation. More profound changes in awareness, perspective, and relationships tend to unfold gradually over months and years of practice.</p>
+                        <p>Everyone's experience is different, and benefits often appear subtly. Sometimes others may notice changes in your behavior or responses before you do!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faq6">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse6" aria-expanded="false" aria-controls="faqCollapse6">
+                        What's the difference between meditation and mindfulness?
+                    </button>
+                </h2>
+                <div id="faqCollapse6" class="accordion-collapse collapse" aria-labelledby="faq6" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>Mindfulness is the quality of present-moment awareness that includes noticing what's happening without judgment. Meditation is a formal practice where you set aside time to cultivate specific mental qualities (like mindfulness, concentration, or compassion).</p>
+                        <p>You can think of meditation as dedicated training sessions for the mind, while mindfulness can be practiced anytime during daily activities like eating, walking, or talking. Many meditation techniques use mindfulness as a core component, but not all meditation practices are mindfulness-based.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
         </div>
     </div>
 </div>
